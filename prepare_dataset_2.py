@@ -140,6 +140,9 @@ if __name__ == "__main__":
         for video_name in tqdm(video_names):
             video_path = os.path.join(subset_indir, video_name, 'images_4')
             video_outdir = outdir.joinpath(video_name)
+            if os.path.exists(video_outdir):
+                print(f"Skipping {video_path}")
+                continue
             video_outdir.mkdir(exist_ok=True, parents=True)
             video_outdir_frames = video_outdir.joinpath('frames')
             video_outdir_frames.mkdir(exist_ok=True, parents=True)
@@ -147,7 +150,8 @@ if __name__ == "__main__":
             video_outdir_labels.mkdir(exist_ok=True, parents=True)
             video_outdir_viz = video_outdir.joinpath('visualizations')
             video_outdir_viz.mkdir(exist_ok=True, parents=True)
-            frames_list = sorted(glob.glob(str(video_path.joinpath('*.png'))))
+            frames_list = sorted(glob.glob(video_path + '/*.png'))
+            print(len(frames_list))
             for frame_id, frame_path in enumerate(frames_list):
                 if frame_id % 20 != 0:  # save every 20th frame
                     continue
